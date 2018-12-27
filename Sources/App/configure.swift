@@ -28,6 +28,7 @@ public func configure(
     services.register(databases)
 
     var migrations = MigrationConfig()
+    migrations.add(model: User.self, database: .psql)
     migrations.add(model: Acronym.self, database: .psql)
     services.register(migrations)
 }
