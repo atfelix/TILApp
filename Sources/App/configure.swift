@@ -17,10 +17,15 @@ public func configure(
     services.register(middlewares)
 
     var databases = DatabasesConfig()
+
+    let databaseName = env == .testing ? "vapor-test" : (Environment.get("DATABASE_DB") ?? "vapor")
+    let databasePort = env == .testing ? 5433 : 5432
+
     let databaseConfig = PostgreSQLDatabaseConfig(
         hostname: Environment.get("DATABASE_HOSTNAME") ?? "localhost",
+        port: databasePort,
         username: Environment.get("DATABASE_USER") ?? "vapor",
-        database: Environment.get("DATABASE_DB") ?? "vapor",
+        database: databaseName,
         password: Environment.get("DATABASE_PASSWORD") ?? "password"
     )
     let database = PostgreSQLDatabase(config: databaseConfig)
@@ -30,5 +35,11 @@ public func configure(
     var migrations = MigrationConfig()
     migrations.add(model: User.self, database: .psql)
     migrations.add(model: Acronym.self, database: .psql)
+    migrations.add(model: Category.self, database: .psql)
+    migrations.add(model: AcronymCategoryPivot.self, database: .psql)
     services.register(migrations)
+
+    var commandConfig = CommandConfig.default()
+    commandConfig.useFluentCommands()
+    services.register(commandConfig)
 }
