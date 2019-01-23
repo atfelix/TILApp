@@ -16,6 +16,7 @@ public func configure(
 
     var middlewares = MiddlewareConfig()
     middlewares.use(ErrorMiddleware.self)
+    middlewares.use(FileMiddleware.self)
     services.register(middlewares)
 
     var databases = DatabasesConfig()
