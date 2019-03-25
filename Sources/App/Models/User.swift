@@ -39,6 +39,9 @@ extension User {
 extension User: PostgreSQLUUIDModel {}
 extension User: Content {}
 extension User: Parameter {}
+extension User: PasswordAuthenticatable {}
+extension User: SessionAuthenticatable {}
+extension User.Public: Content {}
 
 extension User: Migration {
     static func prepare(on connection: PostgreSQLConnection) -> Future<Void> {
@@ -60,7 +63,6 @@ extension User: BasicAuthenticatable {
     static let passwordKey: PasswordKey = \User.password
 }
 
-extension User.Public: Content {}
 
 extension Future where T: User {
     var `public`: Future<User.Public> {

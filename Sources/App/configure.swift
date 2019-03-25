@@ -18,6 +18,7 @@ public func configure(
 
     var middlewares = MiddlewareConfig()
     middlewares.use(ErrorMiddleware.self)
+    middlewares.use(SessionsMiddleware.self)
     middlewares.use(FileMiddleware.self)
     services.register(middlewares)
 
@@ -63,4 +64,5 @@ public func configure(
     services.register(commandConfig)
 
     config.prefer(LeafRenderer.self, for: ViewRenderer.self)
+    config.prefer(MemoryKeyedCache.self, for: KeyedCache.self)
 }
